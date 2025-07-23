@@ -1,0 +1,26 @@
+[
+    {
+        "displayName": "Google",
+        "hostURL": "smtp.gmail.com",
+        "localFileName": "gmail.cer",
+        "lastChecked": null
+    },
+    {
+        "displayName": "Yahoo",
+        "hostURL": "smtp.mail.yahoo.com",
+        "localFileName": "yahoo.cer",
+        "lastChecked": null
+    },
+    {
+        "displayName": "AOL",
+        "hostURL": "smtp.aol.com",
+        "localFileName": "aol.cer",
+        "lastChecked": null
+    },
+    {
+        "displayName": "Outlook",
+        "hostURL": "smtp.office365.com",
+        "localFileName": "outlook.cer",
+        "lastChecked": null
+    }
+]
