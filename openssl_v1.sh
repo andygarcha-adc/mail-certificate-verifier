@@ -1,16 +1,12 @@
 #!/bin/bash
 
-# stop on errors and print them out
-# set -euo pipefail
-
 # temp directory to hold certs pulled down
 TMPDIR=$(mktemp -d)
 PORT=587
-FAILS_FILE=$(mktemp)
 
 # this says that on any "EXIT" signal, we'll go and delete that directory.
 # (this is actually pretty cool)
-trap "rm -rf '$TMPDIR' '$FAILS_FILE'" EXIT
+trap "rm -rf '$TMPDIR'" EXIT
 
 # open file
 cat info_certs.json | jq -c '.[]' | while read -r item; do
@@ -46,12 +42,6 @@ cat info_certs.json | jq -c '.[]' | while read -r item; do
     # strip out all that useless data and just keep the
     # raw certs. put that into certs.pem.
     awk '/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/' "$TMPDIR/raw_output.txt" > "$TMPDIR/certs.pem"
-    # and this i think gets some of that data... back?
-    # is this necessary?
-    # i'm gonna say no.
-    # openssl crl2pkcs7 -nocrl -certfile certs.pem | \
-    # openssl pkcs7 -print_certs > all_certs.pem
-    # curl -o GTSRootR4.pem https://pki.goog/roots.pem
 
     # now we've got all the certs in one file
     # but we need them in separate ones
@@ -63,8 +53,6 @@ cat info_certs.json | jq -c '.[]' | while read -r item; do
     echo "number of certificates recieved: $CERT_COUNT"
     LEAF_CERT="${CERT_FILES[0]}"
     ROOT_CERT="${CERT_FILES[-1]}"
-    # a little confused here. should i have CERT_COUNT-1 or CERT_COUNT-2?
-    # 
     INTERMEDIATES=("${CERT_FILES[@]:1:$((CERT_COUNT))}")
 
     # ssl verify expects the whole chain (except the leaf) in the -untrusted.
